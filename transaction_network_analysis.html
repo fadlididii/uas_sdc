@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "lightblue", "id": "(\u0027N5699\u0027, \u0027B4\u0027)", "label": "N5699 (B4)", "shape": "dot", "size": 0.145}, {"color": "orange", "id": "(\u0027N1428\u0027, \u0027B1\u0027)", "label": "N1428 (B1)", "shape": "dot", "size": 1338.8561624206002}, {"color": "lightblue", "id": "(\u0027N6037\u0027, \u0027B4\u0027)", "label": "N6037 (B4)", "shape": "dot", "size": 81.501}, {"color": "orange", "id": "(\u0027N1451\u0027, \u0027B1\u0027)", "label": "N1451 (B1)", "shape": "dot", "size": 950.001}, {"color": "lightblue", "id": "(\u0027N6057\u0027, \u0027B14\u0027)", "label": "N6057 (B14)", "shape": "dot", "size": 433.0}, {"color": "orange", "id": "(\u0027N1201\u0027, \u0027B1\u0027)", "label": "N1201 (B1)", "shape": "dot", "size": 433.0}, {"color": "lightblue", "id": "(\u0027N6058\u0027, \u0027B86\u0027)", "label": "N6058 (B86)", "shape": "dot", "size": 1150.0}, {"color": "orange", "id": "(\u0027N1202\u0027, \u0027B1\u0027)", "label": "N1202 (B1)", "shape": "dot", "size": 1150.0}, {"color": "lightblue", "id": "(\u0027N6153\u0027, \u0027B93\u0027)", "label": "N6153 (B93)", "shape": "dot", "size": 1330.0}, {"color": "orange", "id": "(\u0027N1315\u0027, \u0027B1\u0027)", "label": "N1315 (B1)", "shape": "dot", "size": 1330.0}, {"color": "lightblue", "id": "(\u0027N6196\u0027, \u0027B4\u0027)", "label": "N6196 (B4)", "shape": "dot", "size": 940.0}, {"color": "orange", "id": "(\u0027N1397\u0027, \u0027B1\u0027)", "label": "N1397 (B1)", "shape": "dot", "size": 940.0}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B3\u0027)", "label": "N1428 (B3)", "shape": "dot", "size": 90.0}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B14\u0027)", "label": "N1428 (B14)", "shape": "dot", "size": 6.60453318}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B8\u0027)", "label": "N1428 (B8)", "shape": "dot", "size": 100.0}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B20\u0027)", "label": "N1428 (B20)", "shape": "dot", "size": 51.886785262}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B6\u0027)", "label": "N1428 (B6)", "shape": "dot", "size": 7.605484363}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B46\u0027)", "label": "N1428 (B46)", "shape": "dot", "size": 4.528333333}, {"color": "lightblue", "id": "(\u0027N1428\u0027, \u0027B4\u0027)", "label": "N1428 (B4)", "shape": "dot", "size": 40.0}, {"color": "lightblue", "id": "(\u0027N6224\u0027, \u0027B5\u0027)", "label": "N6224 (B5)", "shape": "dot", "size": 337.0}, {"color": "lightblue", "id": "(\u0027N6225\u0027, \u0027B28\u0027)", "label": "N6225 (B28)", "shape": "dot", "size": 367.0}, {"color": "lightblue", "id": "(\u0027N6226\u0027, \u0027B14\u0027)", "label": "N6226 (B14)", "shape": "dot", "size": 331.0}, {"color": "lightblue", "id": "(\u0027N6228\u0027, \u0027B12\u0027)", "label": "N6228 (B12)", "shape": "dot", "size": 0.240186}, {"color": "lightblue", "id": "(\u0027N6229\u0027, \u0027B4\u0027)", "label": "N6229 (B4)", "shape": "dot", "size": 0.3600005}, {"color": "lightblue", "id": "(\u0027N6230\u0027, \u0027B3\u0027)", "label": "N6230 (B3)", "shape": "dot", "size": 1.309053}, {"color": "lightblue", "id": "(\u0027N6232\u0027, \u0027B3\u0027)", "label": "N6232 (B3)", "shape": "dot", "size": 0.1264787826}, {"color": "lightblue", "id": "(\u0027N6233\u0027, \u0027B3\u0027)", "label": "N6233 (B3)", "shape": "dot", "size": 0.273317}, {"color": "lightblue", "id": "(\u0027N6234\u0027, \u0027B17\u0027)", "label": "N6234 (B17)", "shape": "dot", "size": 0.2271}, {"color": "lightblue", "id": "(\u0027N6235\u0027, \u0027B4\u0027)", "label": "N6235 (B4)", "shape": "dot", "size": 0.25}, {"color": "lightblue", "id": "(\u0027N6236\u0027, \u0027B4\u0027)", "label": "N6236 (B4)", "shape": "dot", "size": 0.114153}, {"color": "lightblue", "id": "(\u0027N6237\u0027, \u0027B3\u0027)", "label": "N6237 (B3)", "shape": "dot", "size": 0.185738}, {"color": "lightblue", "id": "(\u0027N1451\u0027, \u0027B22\u0027)", "label": "N1451 (B22)", "shape": "dot", "size": 199.2}, {"color": "lightblue", "id": "(\u0027N1451\u0027, \u0027B7\u0027)", "label": "N1451 (B7)", "shape": "dot", "size": 429.0}, {"color": "lightblue", "id": "(\u0027N1451\u0027, \u0027B50\u0027)", "label": "N1451 (B50)", "shape": "dot", "size": 90.3}, {"color": "lightblue", "id": "(\u0027N6743\u0027, \u0027B82\u0027)", "label": "N6743 (B82)", "shape": "dot", "size": 160.0}, {"color": "orange", "id": "(\u0027N2107\u0027, \u0027B1\u0027)", "label": "N2107 (B1)", "shape": "dot", "size": 2846.680882277}, {"color": "lightblue", "id": "(\u0027N8409\u0027, \u0027B3\u0027)", "label": "N8409 (B3)", "shape": "dot", "size": 3.655768}, {"color": "lightblue", "id": "(\u0027N8410\u0027, \u0027B4\u0027)", "label": "N8410 (B4)", "shape": "dot", "size": 839.0}, {"color": "lightblue", "id": "(\u0027N8411\u0027, \u0027B11\u0027)", "label": "N8411 (B11)", "shape": "dot", "size": 25.186506598}, {"color": "lightblue", "id": "(\u0027N2107\u0027, \u0027B82\u0027)", "label": "N2107 (B82)", "shape": "dot", "size": 53.024836742}, {"color": "lightblue", "id": "(\u0027N2107\u0027, \u0027B4\u0027)", "label": "N2107 (B4)", "shape": "dot", "size": 4.304757807}, {"color": "lightblue", "id": "(\u0027N1454\u0027, \u0027B4\u0027)", "label": "N1454 (B4)", "shape": "dot", "size": 1050.0}, {"color": "lightblue", "id": "(\u0027N8412\u0027, \u0027B4\u0027)", "label": "N8412 (B4)", "shape": "dot", "size": 2.090458978}, {"color": "lightblue", "id": "(\u0027N8413\u0027, \u0027B105\u0027)", "label": "N8413 (B105)", "shape": "dot", "size": 0.670995}, {"color": "lightblue", "id": "(\u0027N8414\u0027, \u0027B4\u0027)", "label": "N8414 (B4)", "shape": "dot", "size": 1.2472704}, {"color": "lightblue", "id": "(\u0027N8415\u0027, \u0027B4\u0027)", "label": "N8415 (B4)", "shape": "dot", "size": 2.162653152}, {"color": "lightblue", "id": "(\u0027N8416\u0027, \u0027B4\u0027)", "label": "N8416 (B4)", "shape": "dot", "size": 0.5416356}, {"color": "lightblue", "id": "(\u0027N4422\u0027, \u0027B4\u0027)", "label": "N4422 (B4)", "shape": "dot", "size": 3.5}, {"color": "lightblue", "id": "(\u0027N6744\u0027, \u0027B4\u0027)", "label": "N6744 (B4)", "shape": "dot", "size": 700.0}, {"color": "lightblue", "id": "(\u0027N1316\u0027, \u0027B5\u0027)", "label": "N1316 (B5)", "shape": "dot", "size": 1.296}, {"color": "lightblue", "id": "(\u0027N6754\u0027, \u0027B4\u0027)", "label": "N6754 (B4)", "shape": "dot", "size": 1090.0}, {"color": "orange", "id": "(\u0027N2119\u0027, \u0027B1\u0027)", "label": "N2119 (B1)", "shape": "dot", "size": 2782.0}, {"color": "lightblue", "id": "(\u0027N2119\u0027, \u0027B4\u0027)", "label": "N2119 (B4)", "shape": "dot", "size": 1540.0}, {"color": "lightblue", "id": "(\u0027N2119\u0027, \u0027B20\u0027)", "label": "N2119 (B20)", "shape": "dot", "size": 152.0}, {"color": "lightblue", "id": "(\u0027N6912\u0027, \u0027B37\u0027)", "label": "N6912 (B37)", "shape": "dot", "size": 993.0}, {"color": "orange", "id": "(\u0027N2345\u0027, \u0027B1\u0027)", "label": "N2345 (B1)", "shape": "dot", "size": 997.6330133333}, {"color": "lightblue", "id": "(\u0027N8021\u0027, \u0027B34\u0027)", "label": "N8021 (B34)", "shape": "dot", "size": 0.874905}, {"color": "lightblue", "id": "(\u0027N8022\u0027, \u0027B34\u0027)", "label": "N8022 (B34)", "shape": "dot", "size": 0.8473958332999999}, {"color": "lightblue", "id": "(\u0027N8023\u0027, \u0027B34\u0027)", "label": "N8023 (B34)", "shape": "dot", "size": 0.527625}, {"color": "lightblue", "id": "(\u0027N8024\u0027, \u0027B34\u0027)", "label": "N8024 (B34)", "shape": "dot", "size": 1.0125}, {"color": "lightblue", "id": "(\u0027N8025\u0027, \u0027B34\u0027)", "label": "N8025 (B34)", "shape": "dot", "size": 0.7630875}, {"color": "lightblue", "id": "(\u0027N8026\u0027, \u0027B34\u0027)", "label": "N8026 (B34)", "shape": "dot", "size": 0.6075}, {"color": "lightblue", "id": "(\u0027N6934\u0027, \u0027B4\u0027)", "label": "N6934 (B4)", "shape": "dot", "size": 642.0}, {"color": "orange", "id": "(\u0027N2369\u0027, \u0027B1\u0027)", "label": "N2369 (B1)", "shape": "dot", "size": 1302.055}, {"color": "lightblue", "id": "(\u0027N7851\u0027, \u0027B30\u0027)", "label": "N7851 (B30)", "shape": "dot", "size": 109.0}, {"color": "lightblue", "id": "(\u0027N2369\u0027, \u0027B30\u0027)", "label": "N2369 (B30)", "shape": "dot", "size": 288.0}, {"color": "lightblue", "id": "(\u0027N2369\u0027, \u0027B9\u0027)", "label": "N2369 (B9)", "shape": "dot", "size": 157.0}, {"color": "lightblue", "id": "(\u0027N6935\u0027, \u0027B17\u0027)", "label": "N6935 (B17)", "shape": "dot", "size": 4.6}, {"color": "lightblue", "id": "(\u0027N2369\u0027, \u0027B5\u0027)", "label": "N2369 (B5)", "shape": "dot", "size": 72.955}, {"color": "lightblue", "id": "(\u0027N2369\u0027, \u0027B3\u0027)", "label": "N2369 (B3)", "shape": "dot", "size": 28.5}, {"color": "lightblue", "id": "(\u0027N2569\u0027, \u0027B14\u0027)", "label": "N2569 (B14)", "shape": "dot", "size": 465.0}, {"color": "orange", "id": "(\u0027N2569\u0027, \u0027B1\u0027)", "label": "N2569 (B1)", "shape": "dot", "size": 465.0}, {"color": "lightblue", "id": "(\u0027N7090\u0027, \u0027B14\u0027)", "label": "N7090 (B14)", "shape": "dot", "size": 1030.0}, {"color": "orange", "id": "(\u0027N2599\u0027, \u0027B1\u0027)", "label": "N2599 (B1)", "shape": "dot", "size": 1032.074670937}, {"color": "lightblue", "id": "(\u0027N8228\u0027, \u0027B14\u0027)", "label": "N8228 (B14)", "shape": "dot", "size": 2.074670937}, {"color": "lightblue", "id": "(\u0027N1451\u0027, \u0027B3\u0027)", "label": "N1451 (B3)", "shape": "dot", "size": 150.0}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "(\u0027N5699\u0027, \u0027B4\u0027)", "title": "0.1 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 145000000.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "6.6 B", "to": "(\u0027N1428\u0027, \u0027B14\u0027)", "value": 6604533180.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "100.0 B", "to": "(\u0027N1428\u0027, \u0027B8\u0027)", "value": 100000000000.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "51.9 B", "to": "(\u0027N1428\u0027, \u0027B20\u0027)", "value": 51886785262.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "7.6 B", "to": "(\u0027N1428\u0027, \u0027B6\u0027)", "value": 7605484363.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "4.5 B", "to": "(\u0027N1428\u0027, \u0027B46\u0027)", "value": 4528333333.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B1\u0027)", "title": "40.0 B", "to": "(\u0027N1428\u0027, \u0027B4\u0027)", "value": 40000000000.0}, {"arrows": "to", "from": "(\u0027N6037\u0027, \u0027B4\u0027)", "title": "81.5 B", "to": "(\u0027N1451\u0027, \u0027B1\u0027)", "value": 81501000000.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B1\u0027)", "title": "200.0 B", "to": "(\u0027N1451\u0027, \u0027B7\u0027)", "value": 200000000000.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B1\u0027)", "title": "154.0 B", "to": "(\u0027N1451\u0027, \u0027B22\u0027)", "value": 154000000000.0}, {"arrows": "to", "from": "(\u0027N6057\u0027, \u0027B14\u0027)", "title": "433.0 B", "to": "(\u0027N1201\u0027, \u0027B1\u0027)", "value": 433000000000.0}, {"arrows": "to", "from": "(\u0027N6058\u0027, \u0027B86\u0027)", "title": "1150.0 B", "to": "(\u0027N1202\u0027, \u0027B1\u0027)", "value": 1150000000000.0}, {"arrows": "to", "from": "(\u0027N6153\u0027, \u0027B93\u0027)", "title": "1330.0 B", "to": "(\u0027N1315\u0027, \u0027B1\u0027)", "value": 1330000000000.0}, {"arrows": "to", "from": "(\u0027N6196\u0027, \u0027B4\u0027)", "title": "940.0 B", "to": "(\u0027N1397\u0027, \u0027B1\u0027)", "value": 940000000000.0}, {"arrows": "to", "from": "(\u0027N1428\u0027, \u0027B3\u0027)", "title": "90.0 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 90000000000.0}, {"arrows": "to", "from": "(\u0027N6224\u0027, \u0027B5\u0027)", "title": "337.0 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 337000000000.0}, {"arrows": "to", "from": "(\u0027N6225\u0027, \u0027B28\u0027)", "title": "367.0 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 367000000000.0}, {"arrows": "to", "from": "(\u0027N6226\u0027, \u0027B14\u0027)", "title": "331.0 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 331000000000.0}, {"arrows": "to", "from": "(\u0027N6228\u0027, \u0027B12\u0027)", "title": "0.2 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 240186000.0}, {"arrows": "to", "from": "(\u0027N6229\u0027, \u0027B4\u0027)", "title": "0.4 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 360000500.0}, {"arrows": "to", "from": "(\u0027N6230\u0027, \u0027B3\u0027)", "title": "1.3 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 1309053000.0}, {"arrows": "to", "from": "(\u0027N6232\u0027, \u0027B3\u0027)", "title": "0.1 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 126478782.6}, {"arrows": "to", "from": "(\u0027N6233\u0027, \u0027B3\u0027)", "title": "0.3 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 273317000.0}, {"arrows": "to", "from": "(\u0027N6234\u0027, \u0027B17\u0027)", "title": "0.2 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 227100000.0}, {"arrows": "to", "from": "(\u0027N6235\u0027, \u0027B4\u0027)", "title": "0.2 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 250000000.0}, {"arrows": "to", "from": "(\u0027N6236\u0027, \u0027B4\u0027)", "title": "0.1 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 114153000.0}, {"arrows": "to", "from": "(\u0027N6237\u0027, \u0027B3\u0027)", "title": "0.2 B", "to": "(\u0027N1428\u0027, \u0027B1\u0027)", "value": 185738000.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B22\u0027)", "title": "45.2 B", "to": "(\u0027N1451\u0027, \u0027B1\u0027)", "value": 45200000000.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B7\u0027)", "title": "229.0 B", "to": "(\u0027N1451\u0027, \u0027B1\u0027)", "value": 229000000000.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B50\u0027)", "title": "90.3 B", "to": "(\u0027N1451\u0027, \u0027B1\u0027)", "value": 90300000000.0}, {"arrows": "to", "from": "(\u0027N6743\u0027, \u0027B82\u0027)", "title": "160.0 B", "to": "(\u0027N2107\u0027, \u0027B1\u0027)", "value": 160000000000.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "3.7 B", "to": "(\u0027N8409\u0027, \u0027B3\u0027)", "value": 3655768000.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "839.0 B", "to": "(\u0027N8410\u0027, \u0027B4\u0027)", "value": 839000000000.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "25.2 B", "to": "(\u0027N8411\u0027, \u0027B11\u0027)", "value": 25186506598.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "53.0 B", "to": "(\u0027N2107\u0027, \u0027B82\u0027)", "value": 53024836742.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "4.3 B", "to": "(\u0027N2107\u0027, \u0027B4\u0027)", "value": 4304757807.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "1050.0 B", "to": "(\u0027N1454\u0027, \u0027B4\u0027)", "value": 1050000000000.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "2.1 B", "to": "(\u0027N8412\u0027, \u0027B4\u0027)", "value": 2090458978.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "0.7 B", "to": "(\u0027N8413\u0027, \u0027B105\u0027)", "value": 670995000.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "1.2 B", "to": "(\u0027N8414\u0027, \u0027B4\u0027)", "value": 1247270400.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "2.2 B", "to": "(\u0027N8415\u0027, \u0027B4\u0027)", "value": 2162653152.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "0.5 B", "to": "(\u0027N8416\u0027, \u0027B4\u0027)", "value": 541635600.0}, {"arrows": "to", "from": "(\u0027N2107\u0027, \u0027B1\u0027)", "title": "3.5 B", "to": "(\u0027N4422\u0027, \u0027B4\u0027)", "value": 3500000000.0}, {"arrows": "to", "from": "(\u0027N6744\u0027, \u0027B4\u0027)", "title": "700.0 B", "to": "(\u0027N2107\u0027, \u0027B1\u0027)", "value": 700000000000.0}, {"arrows": "to", "from": "(\u0027N1316\u0027, \u0027B5\u0027)", "title": "1.3 B", "to": "(\u0027N2107\u0027, \u0027B1\u0027)", "value": 1296000000.0}, {"arrows": "to", "from": "(\u0027N6754\u0027, \u0027B4\u0027)", "title": "1090.0 B", "to": "(\u0027N2119\u0027, \u0027B1\u0027)", "value": 1090000000000.0}, {"arrows": "to", "from": "(\u0027N2119\u0027, \u0027B1\u0027)", "title": "1390.0 B", "to": "(\u0027N2119\u0027, \u0027B4\u0027)", "value": 1390000000000.0}, {"arrows": "to", "from": "(\u0027N2119\u0027, \u0027B4\u0027)", "title": "150.0 B", "to": "(\u0027N2119\u0027, \u0027B1\u0027)", "value": 150000000000.0}, {"arrows": "to", "from": "(\u0027N2119\u0027, \u0027B20\u0027)", "title": "152.0 B", "to": "(\u0027N2119\u0027, \u0027B1\u0027)", "value": 152000000000.0}, {"arrows": "to", "from": "(\u0027N6912\u0027, \u0027B37\u0027)", "title": "993.0 B", "to": "(\u0027N2345\u0027, \u0027B1\u0027)", "value": 993000000000.0}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "0.9 B", "to": "(\u0027N8021\u0027, \u0027B34\u0027)", "value": 874905000.0}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "0.8 B", "to": "(\u0027N8022\u0027, \u0027B34\u0027)", "value": 847395833.3}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "0.5 B", "to": "(\u0027N8023\u0027, \u0027B34\u0027)", "value": 527625000.0}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "1.0 B", "to": "(\u0027N8024\u0027, \u0027B34\u0027)", "value": 1012500000.0}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "0.8 B", "to": "(\u0027N8025\u0027, \u0027B34\u0027)", "value": 763087500.0}, {"arrows": "to", "from": "(\u0027N2345\u0027, \u0027B1\u0027)", "title": "0.6 B", "to": "(\u0027N8026\u0027, \u0027B34\u0027)", "value": 607500000.0}, {"arrows": "to", "from": "(\u0027N6934\u0027, \u0027B4\u0027)", "title": "642.0 B", "to": "(\u0027N2369\u0027, \u0027B1\u0027)", "value": 642000000000.0}, {"arrows": "to", "from": "(\u0027N2369\u0027, \u0027B1\u0027)", "title": "109.0 B", "to": "(\u0027N7851\u0027, \u0027B30\u0027)", "value": 109000000000.0}, {"arrows": "to", "from": "(\u0027N2369\u0027, \u0027B1\u0027)", "title": "288.0 B", "to": "(\u0027N2369\u0027, \u0027B30\u0027)", "value": 288000000000.0}, {"arrows": "to", "from": "(\u0027N2369\u0027, \u0027B1\u0027)", "title": "157.0 B", "to": "(\u0027N2369\u0027, \u0027B9\u0027)", "value": 157000000000.0}, {"arrows": "to", "from": "(\u0027N6935\u0027, \u0027B17\u0027)", "title": "4.6 B", "to": "(\u0027N2369\u0027, \u0027B1\u0027)", "value": 4600000000.0}, {"arrows": "to", "from": "(\u0027N2369\u0027, \u0027B5\u0027)", "title": "73.0 B", "to": "(\u0027N2369\u0027, \u0027B1\u0027)", "value": 72955000000.0}, {"arrows": "to", "from": "(\u0027N2369\u0027, \u0027B3\u0027)", "title": "28.5 B", "to": "(\u0027N2369\u0027, \u0027B1\u0027)", "value": 28500000000.0}, {"arrows": "to", "from": "(\u0027N2569\u0027, \u0027B14\u0027)", "title": "465.0 B", "to": "(\u0027N2569\u0027, \u0027B1\u0027)", "value": 465000000000.0}, {"arrows": "to", "from": "(\u0027N7090\u0027, \u0027B14\u0027)", "title": "1030.0 B", "to": "(\u0027N2599\u0027, \u0027B1\u0027)", "value": 1030000000000.0}, {"arrows": "to", "from": "(\u0027N2599\u0027, \u0027B1\u0027)", "title": "2.1 B", "to": "(\u0027N8228\u0027, \u0027B14\u0027)", "value": 2074670937.0}, {"arrows": "to", "from": "(\u0027N1451\u0027, \u0027B3\u0027)", "title": "150.0 B", "to": "(\u0027N1451\u0027, \u0027B1\u0027)", "value": 150000000000.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -80000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
